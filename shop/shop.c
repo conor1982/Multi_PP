@@ -1,8 +1,7 @@
 #include <string.h>
 #include <stdlib.h>
-#define _GNU_SOURCE
 #include <stdio.h>
-//#include <fstream>
+
 
 
 struct Product {
@@ -31,8 +30,9 @@ struct ProductStock {
 
 void printProduct(struct Product p)
 {
-   printf("PRODUCT NAME: %s \nPRODUCT PRICE: %.2f\n",p.name,p.price); 
    printf("--------------\n");
+   printf("PRODUCT NAME: %s \nPRODUCT PRICE: %.2f\n",p.name,p.price); 
+   //printf("--------------\n");
 }
 
 void printCustomer(struct Customer c)
@@ -50,27 +50,49 @@ void printCustomer(struct Customer c)
    }
 }
 
-void createandstockshop()
+struct Shop createAndStockShop()
 {
     struct Shop shop = {200};
-
     FILE *fp = fopen("stock.csv", "r");
-     if(fp == NULL) {
-         perror("Unable to open file!");
-         exit(1);
-     }
+    if(fp == NULL) {
+    perror("Unable to open file!");
+    exit(1);
+}
 
-     char chunk[128];
- 
-     while(fgets(chunk, sizeof(chunk), fp) != NULL) {
-         //fputs(chunk, stdout);
-         char *name = strtok(chunk,",");
-         char *price = strtok(NULL,",");
-         char *q = strtok(NULL,",");
-        int quantity = atoi(q);
+    char line[128];
 
-         printf("NAME OF PRODUCT %s PRICE %s QUANTITY %s\n",name,price,quantity);
-     }
+    while(fgets(line, sizeof(line), fp) != NULL) {
+    char *n =strtok(line,",");
+    char *pri =strtok(NULL,",");
+    char *quant =strtok(NULL,",");
+
+    int quantity = atoi(quant);
+    double price = atof(pri);
+    char *name = malloc(sizeof(char)* 50);
+    strcpy(name,n);
+    struct Product product ={name,price};
+    struct ProductStock stockItem = {product,quantity};
+    shop.stock[shop.index++] = stockItem;
+
+    //printf("NAME OF PRODUCT %s PRICE %.2f QUANTITY %d\n",name,price,quantity);
+    }
+    //printProduct(shop.stock[0].product);
+    return shop;
+}
+
+void printshop(struct Shop s)
+{
+    printf("Shop has %.2f in cash\n", s.cash);
+    for (int i = 0; i < s.index; i++)
+    {
+
+      printProduct(s.stock[i].product);
+      printf("The shop has %d of the above product\n", s.stock[i].quantity);
+
+    }
+
+
+
 }
 
 int main(void)
@@ -89,8 +111,11 @@ int main(void)
 
     //printCustomer(conor);
 
-    createandstockshop();
-     //printf("The shop has %d of the product %s\n",cokeStock.quantity, cokeStock.product.name);
+    struct Shop shop = createAndStockShop();
+    printshop(shop);
+
+    
+    //printf("The shop has %d of the product %s\n",cokeStock.quantity, cokeStock.product.name);
 
 
     return 0;
