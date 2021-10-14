@@ -97,7 +97,7 @@ void printshop(struct Shop s)
 
 int main(void)
 {
-    //struct Customer conor ={"Conor",100.00};
+    struct Customer conor ={"Conor",100.00};
        
     //struct Product coke ={"Can Coke",1.10};
     //struct Product bread = {"Bread",0.7};
@@ -109,7 +109,7 @@ int main(void)
     //conor.shoppingList[conor.index++] = cokeStock;
     //conor.shoppingList[conor.index++] = breadStock;
 
-    //printCustomer(conor);
+    printCustomer(conor);
 
     struct Shop shop = createAndStockShop();
     printshop(shop);
