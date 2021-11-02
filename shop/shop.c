@@ -52,7 +52,7 @@ void printCustomer(struct Customer c)
 
 struct Shop createAndStockShop()
 {
-    struct Shop shop = {200};
+    
     FILE *fp = fopen("stock.csv", "r");
     if(fp == NULL) {
     perror("Unable to open file!");
@@ -60,6 +60,13 @@ struct Shop createAndStockShop()
 }
 
     char line[128];
+
+    fgets(line, sizeof(line), fp);
+    float cash = atof(line);
+    //printf("cash in shop is %.2f\n", cash);
+
+    struct Shop shop = {cash};
+
 
     while(fgets(line, sizeof(line), fp) != NULL) {
     char *n =strtok(line,",");
@@ -109,7 +116,7 @@ int main(void)
     //conor.shoppingList[conor.index++] = cokeStock;
     //conor.shoppingList[conor.index++] = breadStock;
 
-    printCustomer(conor);
+    //printCustomer(conor);
 
     struct Shop shop = createAndStockShop();
     printshop(shop);
