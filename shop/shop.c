@@ -81,10 +81,21 @@ struct Shop createAndStockShop()
     struct ProductStock stockItem = {product,quantity};
     shop.stock[shop.index++] = stockItem;
 
-    //printf("NAME OF PRODUCT %s PRICE %.2f QUANTITY %d\n",name,price,quantity);
+    printf("NAME OF PRODUCT %s PRICE %.2f QUANTITY %d\n",name,price,quantity);
     }
     //printProduct(shop.stock[0].product);
     return shop;
+}
+
+double find(struct Shop s, char* name)
+{
+	for (int i = 0; i < s.index; i++)
+	{
+		if (strcmp(name, s.stock[i].product.name) == 0){
+			return s.stock[i].product.price;
+		}
+	}
+	return 1;
 }
 
 void printshop(struct Shop s)
@@ -106,23 +117,43 @@ int main(void)
 {
     struct Customer conor ={"Conor",100.00};
        
-    //struct Product coke ={"Can Coke",1.10};
-    //struct Product bread = {"Bread",0.7};
+    struct Product coke ={"Can Coke",1.10};
+    struct Product bread = {"Bread",0.7};
     //printProduct(coke);
 
-    //struct ProductStock  cokeStock ={coke,20};
-    //struct ProductStock  breadStock ={bread,2};
+    struct ProductStock  cokeStock ={coke,20};
+    struct ProductStock  breadStock ={bread,2};
 
     //conor.shoppingList[conor.index++] = cokeStock;
     //conor.shoppingList[conor.index++] = breadStock;
 
     //printCustomer(conor);
 
+    struct Product productA = { "Coke Can", 0.0 };
+	struct Product productB = { "Big Bags", 0.0 };
+	struct Product productC = { "Spaghetti", 0.0 };
+
+    struct ProductStock  StockA ={productA,20};
+    struct ProductStock  StockB ={productB,5};   
+    struct ProductStock  StockC ={productC,2}; 
+
+    struct ProductStock array[] = {StockA,StockB,StockC};
+
     struct Shop shop = createAndStockShop();
-    printshop(shop);
+    //printshop(shop);
 
     
-    //printf("The shop has %d of the product %s\n",cokeStock.quantity, cokeStock.product.name);
+    //printf("The shop has %d of the product %s\n",StockA.quantity, StockA.product.name);
+    double totalCostForCustomer = 0;
+    for (int i=0; i<3; i++){
+      struct Product p = array[i].product;
+      double price = find(shop,p.name);
+     // printf("The price of %s in the shop is %.2f\n",p.name,price);
+      double totalCostOfItem = array[i].quantity * price;
+     // printf("You want %d of %s,that will cost you %.2f\n",array[i].quantity,p.name,totalCostOfItem);
+      totalCostForCustomer += totalCostOfItem;
+    }
+   // printf("\nTotal Cost for customer will be %.2f\n",totalCostForCustomer);
 
 
     return 0;
